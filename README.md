@@ -250,14 +250,66 @@ loop:
 
 ## 当前状态
 
-当前仓库还是初始化阶段，只有这份 README。
+仓库已完成 **Milestone 0** 和 **Milestone 1** 的核心部分。
 
-一个务实的下一步是：
+### 已实现功能
 
-1. 选定实现语言
-2. 搭建 CLI 和测试框架
-3. 先完成最小 VM
-4. 再补汇编器与调试器
+- Go 模块初始化（`github.com/ponyfly6/pocket-vm-lab`）
+- 最小栈式虚拟机，支持以下指令：
+  - `CONST` - 将常量压入栈
+  - `ADD` - 弹出两值，压入和
+  - `PRINT` - 弹出并打印栈顶
+  - `HALT` - 停止执行
+- CLI 入口 `pocket-vm-lab`，支持 `-demo` 和 `-file` 参数
+- 单元测试覆盖所有指令及错误路径
+
+### 构建与运行
+
+```bash
+# 构建
+go build -o pocket-vm-lab ./cmd/pocket-vm-lab
+
+# 运行示例程序（计算 3 + 5 = 8，打印 8）
+./pocket-vm-lab -demo
+
+# 运行字节码文件
+./pocket-vm-lab -file testdata/sample.bin
+```
+
+### 测试
+
+```bash
+# 运行所有测试
+go test ./...
+
+# 详细输出
+go test ./... -v
+```
+
+### 项目结构
+
+```
+pocket-vm-lab/
+├── go.mod
+├── README.md
+├── cmd/
+│   └── pocket-vm-lab/
+│       └── main.go        # CLI 入口
+├── internal/
+│   └── vm/
+│       ├── opcode.go      # 操作码定义
+│       ├── vm.go          # 虚拟机实现
+│       └── vm_test.go     # 单元测试
+└── testdata/
+    └── sample.bin         # 示例字节码
+```
+
+### 下一步
+
+1. 扩展指令集（SUB、MUL、DIV、DUP 等）
+2. 实现汇编器
+3. 添加控制流指令（CMP、JMP、JZ、JNZ）
+4. 构建调试器
 
 如果你想把这个仓库作为 coding agent 的长期 benchmark，那么最重要的不是一次性堆很多功能，而是持续要求 agent 在每一轮改动里同时维护：
 
